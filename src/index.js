@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import App from './App';
 import CssBaseline from '@mui/material/CssBaseline';
+import './index.css';
 
 const darkTheme = createTheme({
   palette: {

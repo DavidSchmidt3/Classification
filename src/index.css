@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.settings {
+  margin-left: 100px;
+}
+
+.slider {
+  margin-top: 35px;
+  margin-left: 30px;
+}
+
+.title {
+  margin-top: 10px !important;
+  margin-left: 10px !important;
+  display: inline-block;
+}
+
+.button {
+  margin-bottom: 20px !important;
+}
+
+.center {
+  display: inline-block;
+  text-align: center;
+  margin: 0 auto;
+}

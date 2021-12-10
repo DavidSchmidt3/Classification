@@ -1,47 +1,67 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import Settings from './Settings';
 
+let points = [
+  { x: -4500, y: -4400, color: 'red' },
+  { x: 2500, y: -3400, color: 'green' },
+  { x: -4100, y: 3000, color: 'blue' },
+  { x: -4100, y: -3000, color: 'red' },
+  { x: 4500, y: -4400, color: 'green' },
+  { x: -1800, y: -2400, color: 'red' },
+  { x: -2500, y: -3400, color: 'red' },
+  { x: 2000, y: -1400, color: 'green' },
+  { x: 4100, y: -3000, color: 'green' },
+  { x: -2000, y: -1400, color: 'red' },
+  { x: -2500, y: 3400, color: 'blue' },
+  { x: -4500, y: 4400, color: 'blue' },
+  { x: 1800, y: -2400, color: 'green' },
+  { x: 4100, y: 3000, color: 'purple' },
+  { x: 4500, y: 4400, color: 'purple' },
+  { x: -1800, y: 2400, color: 'blue' },
+  { x: 2500, y: 3400, color: 'purple' },
+  { x: 1800, y: 2400, color: 'purple' },
+  { x: -2000, y: 1400, color: 'blue' },
+  { x: 2000, y: 1400, color: 'purple' }
+];
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      successRates: [0, 0, 0, 0],
+      pointsCount: 1000,
+      ks: [3, 5, 7, 15],
       plotPointsX: [[], [], [], []],
       plotPointsY: [[], [], [], []],
       markerStyles: [],
       plotColors: [{ color: [] }, { color: [] }, { color: [] }, { color: [] }]
     }
 
-    this.points = [
-      { x: -4500, y: -4400, color: 'red' },
-      { x: -4100, y: -3000, color: 'red' },
-      { x: -1800, y: -2400, color: 'red' },
-      { x: -2500, y: -3400, color: 'red' },
-      { x: -2000, y: -1400, color: 'red' },
-      { x: 4500, y: -4400, color: 'green' },
-      { x: 4100, y: -3000, color: 'green' },
-      { x: 1800, y: -2400, color: 'green' },
-      { x: 2500, y: -3400, color: 'green' },
-      { x: 2000, y: -1400, color: 'green' },
-      { x: -4500, y: 4400, color: 'blue' },
-      { x: -4100, y: 3000, color: 'blue' },
-      { x: -1800, y: 2400, color: 'blue' },
-      { x: -2500, y: 3400, color: 'blue' },
-      { x: -2000, y: 1400, color: 'blue' },
-      { x: 4500, y: 4400, color: 'purple' },
-      { x: 4100, y: 3000, color: 'purple' },
-      { x: 1800, y: 2400, color: 'purple' },
-      { x: 2500, y: 3400, color: 'purple' },
-      { x: 2000, y: 1400, color: 'purple' }
-    ];
-
+    this.points = this.copyPoints(points);
     this.classifiedPoints = [this.copyPoints(this.points), this.copyPoints(this.points), this.copyPoints(this.points), this.copyPoints(this.points)];
+  }
+
+  handleSlider = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  copyKs = ks => {
+    return ks.map(k => k);
+  }
+
+  changeK = e => {
+    let index = Number(e.target.name);
+    let ks = this.copyKs(this.state.ks);
+    ks[index] = Number(e.target.value);
+
+    this.setState({ ks });
   }
 
   copyPoints = points => {
     return points.map(point => {
-      return { x: point.x, y: point.y, color: point.color }
+      return { x: point.x, y: point.y, color: point.color };
     });
   }
 
@@ -62,6 +82,7 @@ export default class App extends React.Component {
 
   classify = (x, y, k, currentPoints) => {
     let closestPoints = [];
+
     for (let i = 0; i < k; i++) {
       let distance = Math.sqrt(Math.pow(currentPoints[i].x - x, 2) + Math.pow(currentPoints[i].y - y, 2));
       closestPoints.push({ index: i, distance, color: currentPoints[i].color });
@@ -73,14 +94,14 @@ export default class App extends React.Component {
     });
 
 
-    for (let i = 0; i < currentPoints.length; i++) {
+    for (let i = k; i < currentPoints.length; i++) {
       let distance = Math.sqrt(Math.pow(currentPoints[i].x - x, 2) + Math.pow(currentPoints[i].y - y, 2))
       for (let j = 0; j < k; j++) {
         if (distance < closestPoints[j].distance) {
-          for (let z = k - 1; z < j; z--) {
+          for (let z = k - 1; z > j; z--) {
             closestPoints[z] = closestPoints[z - 1]
-            closestPoints[j] = { index: i, distance, color: currentPoints[i].color }
           }
+          closestPoints[j] = { index: i, distance, color: currentPoints[i].color }
           break;
         }
       }
@@ -125,9 +146,12 @@ export default class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    let count = 200;
-    let ks = [3, 5, 7, 15];
+  startClassification = () => {
+    this.points = this.copyPoints(points);
+    this.classifiedPoints = [this.copyPoints(this.points), this.copyPoints(this.points), this.copyPoints(this.points), this.copyPoints(this.points)];
+
+    let count = this.state.pointsCount;
+    let ks = this.state.ks;
     let classificationsArray = [0, 0, 0, 0];
 
     for (let i = 0; i < count; i++) {
@@ -181,7 +205,7 @@ export default class App extends React.Component {
     let successRates = [0, 0, 0, 0];
 
     for (let i = 0; i < classificationsArray.length; i++) {
-      successRates[i] = (classificationsArray[i] / count) * 100;
+      successRates[i] = ((classificationsArray[i] / count) * 100).toFixed(2);
     }
 
     let plotPointsX = [[], [], [], []];
@@ -196,27 +220,44 @@ export default class App extends React.Component {
       })
     }
 
-    console.log(plotPointsX, plotPointsY);
-    this.setState({ plotPointsX, plotPointsY, plotColors });
+    this.setState({ plotPointsX, plotPointsY, plotColors, successRates });
+  }
+
+  mapPlots = () => {
+    let plots = []
+    for (let i = 0; i < 4; i++) {
+      plots.push(<Plot
+        data={[
+          {
+            x: this.state.plotPointsX[i],
+            y: this.state.plotPointsY[i],
+            mode: 'markers',
+            type: 'scatter',
+            marker: this.state.plotColors[i]
+          }
+        ]}
+        layout={{ width: 1600, height: 800, title: `K = ${this.state.ks[i]}, Success rate = ${this.state.successRates[i]} %` }}
+      />)
+    }
+
+    return plots;
   }
 
 
   render() {
     return (
-      <Plot
-        data={[
-          {
-            x: this.state.plotPointsX[0],
-            y: this.state.plotPointsY[0],
-            mode: 'markers',
-            type: 'scatter',
-            // marker: { color: 'red' },
-            marker: this.state.plotColors[0]
-          }
-        ]}
-        layout={{ width: 1600, height: 800, title: 'Klasifikácia bodov' }}
-        name
-      />
+      <>
+        <Settings
+          handleSlider={this.handleSlider}
+          startClassification={this.startClassification}
+          pointsCount={this.state.pointsCount}
+          ks={this.state.ks}
+          changeK={this.changeK}
+        />
+        <div className='center'>
+          {this.mapPlots()}
+        </div>
+      </>
     );
   }
 }
