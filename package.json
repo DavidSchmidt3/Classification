@@ -1,7 +1,7 @@
 {
   "name": "classification",
   "version": "0.1.0",
-  "homepage": "https://DavidSchmidt3.github.io/genetic-algorithm",
+  "homepage": "https://DavidSchmidt3.github.io/Classification",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.5.0",

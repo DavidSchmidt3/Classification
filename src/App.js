@@ -32,7 +32,7 @@ export default class App extends React.Component {
     this.state = {
       successRates: [0, 0, 0, 0],
       pointsCount: 1000,
-      ks: [3, 5, 7, 15],
+      ks: [1, 3, 7, 15],
       plotPointsX: [[], [], [], []],
       plotPointsY: [[], [], [], []],
       markerStyles: [],
@@ -88,11 +88,10 @@ export default class App extends React.Component {
       closestPoints.push({ index: i, distance, color: currentPoints[i].color });
     }
 
-    closestPoints.sort((a, b) => {  // Sortnem si pole podla vzdialenosti
+    closestPoints.sort((a, b) => {
       let x = a.distance < b.distance ? -1 : 1;
       return x;
     });
-
 
     for (let i = k; i < currentPoints.length; i++) {
       let distance = Math.sqrt(Math.pow(currentPoints[i].x - x, 2) + Math.pow(currentPoints[i].y - y, 2))
@@ -146,13 +145,16 @@ export default class App extends React.Component {
     }
   }
 
-  startClassification = () => {
+  startClassification = async () => {
     this.points = this.copyPoints(points);
     this.classifiedPoints = [this.copyPoints(this.points), this.copyPoints(this.points), this.copyPoints(this.points), this.copyPoints(this.points)];
 
     let count = this.state.pointsCount;
     let ks = this.state.ks;
     let classificationsArray = [0, 0, 0, 0];
+    let plotPointsX = [[], [], [], []];
+    let plotPointsY = [[], [], [], []];
+    let plotColors = [{ color: [] }, { color: [] }, { color: [] }, { color: [] }];
 
     for (let i = 0; i < count; i++) {
       let x, y, color;
@@ -197,6 +199,7 @@ export default class App extends React.Component {
         let classifiedPoint = this.classify(newPoint.x, newPoint.y, k, this.classifiedPoints[j])
         this.classifiedPoints[j].push(classifiedPoint);
 
+
         if (classifiedPoint['color'] === this.points[i]['color'])
           classificationsArray[j] += 1
       }
@@ -207,10 +210,6 @@ export default class App extends React.Component {
     for (let i = 0; i < classificationsArray.length; i++) {
       successRates[i] = ((classificationsArray[i] / count) * 100).toFixed(2);
     }
-
-    let plotPointsX = [[], [], [], []];
-    let plotPointsY = [[], [], [], []];
-    let plotColors = [{ color: [] }, { color: [] }, { color: [] }, { color: [] }];
 
     for (let i = 0; i < 4; i++) {
       this.classifiedPoints[i].forEach(point => {
@@ -223,17 +222,19 @@ export default class App extends React.Component {
     this.setState({ plotPointsX, plotPointsY, plotColors, successRates });
   }
 
+
   mapPlots = () => {
     let plots = []
     for (let i = 0; i < 4; i++) {
       plots.push(<Plot
+        key={i}
         data={[
           {
             x: this.state.plotPointsX[i],
             y: this.state.plotPointsY[i],
             mode: 'markers',
             type: 'scatter',
-            marker: this.state.plotColors[i]
+            marker: this.state.plotColors[i],
           }
         ]}
         layout={{ width: 1600, height: 800, title: `K = ${this.state.ks[i]}, Success rate = ${this.state.successRates[i]} %` }}

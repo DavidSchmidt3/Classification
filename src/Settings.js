@@ -23,15 +23,11 @@ export default class Settings extends React.Component {
             label="Prvé K"
             onChange={this.props.changeK}
           >
-            <MenuItem value={3}>3</MenuItem>
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={7}>7</MenuItem>
-            <MenuItem value={9}>9</MenuItem>
-            <MenuItem value={11}>11</MenuItem>
-            <MenuItem value={13}>13</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={17}>17</MenuItem>
-            <MenuItem value={19}>19</MenuItem>
+            {[...Array(20)].map((x, i) => {
+              if (i % 2 === 1)
+                return <MenuItem value={i}>{i}</MenuItem>
+              else return null;
+            })}
           </Select>
         </FormControl>
         <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
@@ -44,15 +40,11 @@ export default class Settings extends React.Component {
             label="Druhé K"
             onChange={this.props.changeK}
           >
-            <MenuItem value={3}>3</MenuItem>
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={7}>7</MenuItem>
-            <MenuItem value={9}>9</MenuItem>
-            <MenuItem value={11}>11</MenuItem>
-            <MenuItem value={13}>13</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={17}>17</MenuItem>
-            <MenuItem value={19}>19</MenuItem>
+            {[...Array(20)].map((x, i) => {
+              if (i % 2 === 1)
+                return <MenuItem value={i}>{i}</MenuItem>
+              else return null;
+            })}
           </Select>
         </FormControl>
         <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
@@ -65,15 +57,11 @@ export default class Settings extends React.Component {
             label="Tretie K"
             onChange={this.props.changeK}
           >
-            <MenuItem value={3}>3</MenuItem>
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={7}>7</MenuItem>
-            <MenuItem value={9}>9</MenuItem>
-            <MenuItem value={11}>11</MenuItem>
-            <MenuItem value={13}>13</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={17}>17</MenuItem>
-            <MenuItem value={19}>19</MenuItem>
+            {[...Array(20)].map((x, i) => {
+              if (i % 2 === 1)
+                return <MenuItem value={i}>{i}</MenuItem>
+              else return null;
+            })}
           </Select>
         </FormControl>
         <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
@@ -86,15 +74,11 @@ export default class Settings extends React.Component {
             label="Tretie K"
             onChange={this.props.changeK}
           >
-            <MenuItem value={3}>3</MenuItem>
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={7}>7</MenuItem>
-            <MenuItem value={9}>9</MenuItem>
-            <MenuItem value={11}>11</MenuItem>
-            <MenuItem value={13}>13</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={17}>17</MenuItem>
-            <MenuItem value={19}>19</MenuItem>
+            {[...Array(20)].map((x, i) => {
+              if (i % 2 === 1)
+                return <MenuItem value={i}>{i}</MenuItem>
+              else return null;
+            })}
           </Select>
         </FormControl>
         <Box className="box" sx={{ width: 300 }}>

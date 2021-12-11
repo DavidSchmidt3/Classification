@@ -13,6 +13,7 @@ code {
 }
 
 .settings {
+  margin-top: 20px;
   margin-left: 100px;
 }
 
@@ -28,6 +29,7 @@ code {
 }
 
 .button {
+  margin-left: 10px !important;
   margin-bottom: 20px !important;
 }
 
